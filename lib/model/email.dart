@@ -1,92 +1,191 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:form_builder/view/home.dart';
 
-class EmailBuilder extends StatelessWidget{
-  Icon icon=Icon(Icons.email);
-  String name='Email';
-  String value='';
-  bool required=false;
-  int fontSize=18;
-  String label='';
-  buildDialog(context)
-  {
+class EmailBuilder extends StatelessWidget {
+  Icon icon = Icon(Icons.email);
+  String name = 'Email';
+  String value = 'This is default value';
+  bool required = false;
+  int fontSize = 18;
+  String label = '';
+  bool showErrorText = false;
+
+  buildDialog(context) {
+    final key = GlobalKey();
     showDialog(
         context: context,
         builder: (context) => StatefulBuilder(
-          builder: (ctx, setState) => AlertDialog(
-            title: Text('Create Email Widget', style: TextStyle(color: Colors.black),),
-            content: Container(
-                height: 200,
-                width: 600,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(40),
-                    boxShadow: [BoxShadow(blurRadius: 20, color: Colors.white, spreadRadius: 20, blurStyle: BlurStyle.solid)]
+              builder: (ctx, setState) => AlertDialog(
+                title: Text(
+                  'Create Email Widget',
+                  style: TextStyle(color: Colors.black),
                 ),
-                child: Column(
-                  children: [
-                    TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Enter Hint Text',
+                content: Container(
+                  height: 200,
+                  width: 600,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(40),
+                      boxShadow: [
+                        BoxShadow(
+                            blurRadius: 20,
+                            color: Colors.white,
+                            spreadRadius: 20,
+                            blurStyle: BlurStyle.solid)
+                      ]),
+                  child: Column(
+                    children: [
+                      TextField(
+                        decoration: InputDecoration(
+                          errorText: showErrorText ? 'Field is required' : null,
+                          hintText: 'Enter Hint Text(required)',
+                        ),
+                        onChanged: (v) =>  setState(() {
+                          value = v;
+                          showErrorText = v.length > 0 ? false : true;
+                        }),
                       ),
-                      onChanged: (v) => value=v,
-                    ),
-                    TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Enter label Text',
+                      TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Enter label Text',
+                        ),
+                        onChanged: (v) => setState(() {
+                          value = v;
+                          showErrorText = v.length > 0 ? false : true;
+                        }),
                       ),
-                      onChanged: (v) => label=v,
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-            ),
-            actions: [
-              SwitchListTile(value: required, onChanged: (newValue) {
-                required=newValue;
-                setState((){});
-              },
-                title: Text('required :'),
+                actions: [
+                  SwitchListTile(
+                    value: required,
+                    onChanged: (newValue) => setState(() {required = newValue;}),
+                    title: Text('required :'),
+                  ),
+                  RaisedButton(
+                    child: Text('Save'),
+                    onPressed: () {
+                      value.length > 0
+                          ? previewBloc.widgetListUpdateSink.add({
+                              key.toString(): EmailBuilderWidget(
+                                  value, fontSize, required, label, key)
+                            })
+                          : null;
+                      value.length > 0 ? Navigator.of(context).pop() : null;
+                      setState(() {
+                        showErrorText = true;
+                      });
+                    },
+                  )
+                ],
               ),
-              RaisedButton(
-                child: Text('Save'),
-                onPressed: (){
-                  previewBloc.widgetListUpdateSink.add(EmailBuilderWidget(value, fontSize, required, label));
-                  exportBloc.codeUpdateSink.add(getCode());
-                  Navigator.of(context).pop();
+            ));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+class EmailBuilderWidget extends StatefulWidget {
+  String? value;
+  int fontSize;
+  bool required;
+  String label;
+  var key;
+
+  EmailBuilderWidget(
+      this.value, this.fontSize, this.required, this.label, this.key);
+
+  EmailBuilderState createState() =>
+      EmailBuilderState(value, fontSize, required, label, key);
+}
+
+class EmailBuilderState extends State<EmailBuilderWidget> {
+  String? value;
+  String suffixValue = '@gmail.com';
+  int fontSize;
+  bool required;
+  String newText = 'h';
+  String label;
+  var key;
+
+  EmailBuilderState(
+      this.value, this.fontSize, this.required, this.label, this.key);
+
+  @override
+  Widget build(BuildContext context) {
+    exportBloc.codeUpdateSink.add({key.toString(): getCode()});
+    return ListTile(
+      title: Container(
+        child: TextField(
+          onChanged: (value) {
+            setState(() {
+              newText = value;
+            });
+          },
+          decoration: InputDecoration(
+              errorText:
+                  required && newText.length <= 0 ? 'Field is required' : null,
+              hintText: value,
+              suffix: DropdownButton(
+                value: suffixValue,
+                items: [
+                  '@gmail.com',
+                  '@yahoo.com',
+                  '@yahoo.in',
+                  '@rediffmail.com'
+                ]
+                    .map((e) => DropdownMenuItem(child: Text(e), value: e))
+                    .toList(),
+                onChanged: (String? value) {
+                  suffixValue = value!;
+                  setState(() {});
                 },
-              )
-            ],
-          ),)
+              )),
+          style: TextStyle(
+            fontSize: fontSize.toDouble(),
+          ),
+        ),
+        padding: EdgeInsets.all(10),
+        width: 200,
+      ),
+      trailing: RaisedButton(
+        onPressed: () {
+          previewBloc.widgetRemoveSink.add(key.toString());
+          exportBloc.codeRemoveSink.add(key.toString());
+        },
+        child: Text('remove'),
+      ),
     );
   }
-  getCode()
-  {
-    return """
-    
+
+  getCode() {
+    return """  
     //Email
     Container(
       child: TextField(
         onChanged: (value){
-          newText=value;
           setState(() {
+          '$newText'
           });
         },
         decoration: InputDecoration(
-          errorText: required && newText.length <= 0?'Field is required': null,
-            hintText: value,
+          errorText: $required && ${newText.length} <= 0?'Field is required': null,
+            hintText: $value,
             suffix: DropdownButton(
-              value: suffixValue,
+              value: $suffixValue,
               items: ['@gmail.com', '@yahoo.com', '@yahoo.in', '@rediffmail.com'].map((e) => DropdownMenuItem(child: Text(e), value: e)).toList(),
               onChanged: (String? value) {
-                suffixValue=value!;
+                //'$suffixValue' provide updated value to your suffix value
                 setState(() {
                 });
-              },
-
+              }, 
             )
         ),
         style: TextStyle(
-          fontSize: fontSize,
+          fontSize: $fontSize,
         ),
       ),
       padding: EdgeInsets.all(10),
@@ -94,61 +193,4 @@ class EmailBuilder extends StatelessWidget{
     ),
     """;
   }
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-
-}
-class EmailBuilderWidget extends StatefulWidget
-{
-  String? value;
-  int fontSize;
-  bool required;
-  String label;
-  EmailBuilderWidget(this.value, this.fontSize, this.required, this.label);
-  EmailBuilderState createState() => EmailBuilderState(value, fontSize, required, label);
-}
-class EmailBuilderState extends State<EmailBuilderWidget>
-{
-  String? value;
-  String suffixValue='@gmail.com';
-  int fontSize;
-  bool required;
-  String newText='h';
-  String label;
-  EmailBuilderState(this.value, this.fontSize, this.required, this.label);
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: TextField(
-        onChanged: (value){
-          newText=value;
-          setState(() {
-          });
-        },
-        decoration: InputDecoration(
-          errorText: required && newText.length <= 0?'Field is required': null,
-            hintText: value,
-            suffix: DropdownButton(
-              value: suffixValue,
-              items: ['@gmail.com', '@yahoo.com', '@yahoo.in', '@rediffmail.com'].map((e) => DropdownMenuItem(child: Text(e), value: e)).toList(),
-              onChanged: (String? value) {
-                suffixValue=value!;
-                setState(() {
-                });
-              },
-
-            )
-        ),
-        style: TextStyle(
-          fontSize: fontSize.toDouble(),
-        ),
-      ),
-      padding: EdgeInsets.all(10),
-      width: 200,
-    );
-  }
-
-
 }

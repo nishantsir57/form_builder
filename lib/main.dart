@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_builder/Controller/widget_controller.dart';
 import 'package:form_builder/view/home.dart';
 import 'package:provider/provider.dart';
@@ -11,13 +10,10 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        Provider<WidgetBloc>(create: (context) => WidgetBloc(),),
-      ],
-        child:MaterialApp(
-          debugShowCheckedModeBanner: false,
-      home: Home()
-    ));
+    return MultiProvider(providers: [
+      Provider<WidgetBloc>(
+        create: (context) => WidgetBloc(),
+      ),
+    ], child: MaterialApp(debugShowCheckedModeBanner: false, home: Home()));
   }
 }
