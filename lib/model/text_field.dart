@@ -100,7 +100,7 @@ class TextFieldBuilder extends StatelessWidget {
                     onPressed: () {
                       value.length > 0
                           ? previewBloc.widgetListUpdateSink.add({
-                              key.toString(): TextFieldBuilderWidget(
+                              key.toString(): _TextFieldBuilderWidget(
                                   value, fontSize, required, key)
                             })
                           : null;
@@ -121,26 +121,26 @@ class TextFieldBuilder extends StatelessWidget {
   }
 }
 
-class TextFieldBuilderWidget extends StatefulWidget {
+class _TextFieldBuilderWidget extends StatefulWidget {
   String? value;
   int fontSize;
   bool required;
   var key;
 
-  TextFieldBuilderWidget(this.value, this.fontSize, this.required, this.key);
+  _TextFieldBuilderWidget(this.value, this.fontSize, this.required, this.key);
 
-  TextFieldBuilderState createState() =>
-      TextFieldBuilderState(value, fontSize, required, key);
+  _TextFieldBuilderState createState() =>
+      _TextFieldBuilderState(value, fontSize, required, key);
 }
 
-class TextFieldBuilderState extends State<TextFieldBuilderWidget> {
+class _TextFieldBuilderState extends State<_TextFieldBuilderWidget> {
   String? value;
   int fontSize;
   String textValue = 'This is default value';
   bool required;
   var key;
 
-  TextFieldBuilderState(this.value, this.fontSize, this.required, this.key);
+  _TextFieldBuilderState(this.value, this.fontSize, this.required, this.key);
 
   @override
   Widget build(BuildContext context) {

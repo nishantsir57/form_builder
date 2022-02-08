@@ -39,11 +39,11 @@ class HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: buildBody(),
+      body: _buildBody(),
     );
   }
 
-  buildBody() {
+  _buildBody() {
     var w = MediaQuery.of(context).size.width;
     var h = MediaQuery.of(context).size.height;
     return ListView(
@@ -110,7 +110,7 @@ class HomeState extends State<Home> {
                   width: 280,
                   height: h - 150,
                   color: Colors.red[100],
-                  child: buildPallets(),
+                  child: _buildPallets(),
                 ),
               )),
           Positioned(
@@ -161,41 +161,40 @@ class HomeState extends State<Home> {
     );
   }
 
-  buildPallets() =>ListView(
-    children: [
-      Row(
+  _buildPallets() => ListView(
         children: [
-          createIconButton(TextBuilder()),
-          createIconButton(ParagraphBuilder()),
-          createIconButton(DropdownBuilder()),
+          Row(
+            children: [
+              createIconButton(TextBuilder()),
+              createIconButton(ParagraphBuilder()),
+              createIconButton(DropdownBuilder()),
+            ],
+          ),
+          Row(
+            children: [
+              createIconButton(RadioBuilder()),
+              createIconButton(CheckboxBuilder()),
+              createIconButton(DateBuilder()),
+            ],
+          ),
+          Row(
+            children: [
+              createIconButton(TimeBuilder()),
+              createIconButton(NumberBuilder()),
+              createIconButton(WebsiteBuilder()),
+            ],
+          ),
+          Row(
+            children: [
+              createIconButton(EmailBuilder()),
+            ],
+          )
         ],
-      ),
-      Row(
-        children: [
-          createIconButton(RadioBuilder()),
-          createIconButton(CheckboxBuilder()),
-          createIconButton(DateBuilder()),
-        ],
-      ),
-      Row(
-        children: [
-          createIconButton(TimeBuilder()),
-          createIconButton(NumberBuilder()),
-          createIconButton(WebsiteBuilder()),
-        ],
-      ),
-      Row(
-        children: [
-          createIconButton(EmailBuilder()),
-        ],
-      )
-    ],
-  );
+      );
 
   createPreviewPage() => StreamBuilder(
       stream: previewBloc.widgetListStream,
-      builder: (BuildContext context,
-          AsyncSnapshot<Map<String, Widget>> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<Map<String, Widget>> snapshot) {
         return Container(
           height: 50,
           width: 270,
@@ -213,14 +212,14 @@ class HomeState extends State<Home> {
     var name = wb.name;
 
     return Draggable(
-      feedback: Material(child: onDraging(icon)),
-      child: staticDragButton(icon, name),
-      childWhenDragging: staticDragButton(icon, name),
-      onDragEnd: (details)=>wb.buildDialog(context),
+      feedback: Material(child: _onDraging(icon)),
+      child: _staticDragButton(icon, name),
+      childWhenDragging: _staticDragButton(icon, name),
+      onDragEnd: (details) => wb.buildDialog(context),
     );
   }
 
-  onDraging(icon) =>AnimatedContainer(
+  _onDraging(icon) => AnimatedContainer(
       duration: Duration(seconds: 2),
       curve: Curves.easeIn,
       padding: EdgeInsets.all(6),
@@ -240,41 +239,33 @@ class HomeState extends State<Home> {
         ),
       ));
 
-  staticDragButton(icon, name) => AnimatedContainer(
-    duration: Duration(seconds: 2),
-    curve: Curves.bounceInOut,
-    padding: EdgeInsets.all(5),
-    child: Container(
-      alignment: Alignment.center,
-      width: 80,
-      height: 80,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
-          border: Border.all(color: Colors.black),
-          color: Colors.white),
-      child: ListTile(
-        title: IconButton(
-          onPressed: onPressed,
-          icon: icon,
-          alignment: Alignment.centerLeft,
-          iconSize: 25,
-          hoverColor: Colors.green,
+  _staticDragButton(icon, name) => AnimatedContainer(
+        duration: Duration(seconds: 2),
+        curve: Curves.bounceInOut,
+        padding: EdgeInsets.all(5),
+        child: Container(
+          alignment: Alignment.center,
+          width: 80,
+          height: 80,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              border: Border.all(color: Colors.black),
+              color: Colors.white),
+          child: ListTile(
+            title: IconButton(
+              onPressed: onPressed,
+              icon: icon,
+              alignment: Alignment.centerLeft,
+              iconSize: 25,
+              hoverColor: Colors.green,
+            ),
+            subtitle: Text(
+              '$name',
+              style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+            ),
+          ),
         ),
-        subtitle: Text(
-          '$name',
-          style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
-        ),
-      ),
-    ),
-  );
-
-  createForm() => StreamBuilder(
-      stream: widgetBloc.widgetBuilderListStream,
-      builder: (BuildContext ctx, AsyncSnapshot<List<Widget>> snapshot) {
-        return ListView.builder(
-            itemCount: snapshot.data == null ? 0 : snapshot.data!.length,
-            itemBuilder: (_, index) => snapshot.data![index]);
-      });
+      );
 
   onPressed() {}
 }

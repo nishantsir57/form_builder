@@ -101,7 +101,7 @@ class NumberBuilder extends StatelessWidget {
                     onPressed: () {
                       value.length > 0
                           ? previewBloc.widgetListUpdateSink.add({
-                              key.toString(): NumberBuilderWidget(
+                              key.toString(): _NumberBuilderWidget(
                                   value, fontSize, required, key)
                             })
                           : Container();
@@ -128,26 +128,26 @@ class NumberBuilder extends StatelessWidget {
   }
 }
 
-class NumberBuilderWidget extends StatefulWidget {
+class _NumberBuilderWidget extends StatefulWidget {
   String? value;
   int fontSize;
   bool required;
   var key;
 
-  NumberBuilderWidget(this.value, this.fontSize, this.required, this.key);
+  _NumberBuilderWidget(this.value, this.fontSize, this.required, this.key);
 
-  NumberBuilderState createState() =>
-      NumberBuilderState(value, fontSize, required, key);
+  _NumberBuilderState createState() =>
+      _NumberBuilderState(value, fontSize, required, key);
 }
 
-class NumberBuilderState extends State<NumberBuilderWidget> {
+class _NumberBuilderState extends State<_NumberBuilderWidget> {
   String? value;
   int fontSize;
   bool required;
   String text = '9';
   var key;
 
-  NumberBuilderState(this.value, this.fontSize, this.required, this.key);
+  _NumberBuilderState(this.value, this.fontSize, this.required, this.key);
 
   @override
   Widget build(BuildContext context) {

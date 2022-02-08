@@ -8,7 +8,7 @@ class DateBuilder extends StatelessWidget {
   buildDialog(context) {
     final key = GlobalKey();
     previewBloc.widgetListUpdateSink
-        .add({key.toString(): DateBuilderWidget(key)});
+        .add({key.toString(): _DateBuilderWidget(key)});
   }
 
   @override
@@ -17,17 +17,17 @@ class DateBuilder extends StatelessWidget {
   }
 }
 
-class DateBuilderWidget extends StatefulWidget {
+class _DateBuilderWidget extends StatefulWidget {
   var key;
 
-  DateBuilderWidget(this.key);
+  _DateBuilderWidget(this.key);
 
-  DateBuilderState createState() => DateBuilderState(key);
+  _DateBuilderState createState() => _DateBuilderState(key);
 }
 
-class DateBuilderState extends State<DateBuilderWidget> {
+class _DateBuilderState extends State<_DateBuilderWidget> {
   var key;
-  DateBuilderState(this.key);
+  _DateBuilderState(this.key);
   DateTime date = DateTime.now();
 
   @override

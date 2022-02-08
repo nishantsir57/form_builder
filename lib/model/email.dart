@@ -67,7 +67,7 @@ class EmailBuilder extends StatelessWidget {
                     onPressed: () {
                       value.length > 0
                           ? previewBloc.widgetListUpdateSink.add({
-                              key.toString(): EmailBuilderWidget(
+                              key.toString(): _EmailBuilderWidget(
                                   value, fontSize, required, label, key)
                             })
                           : null;
@@ -88,21 +88,21 @@ class EmailBuilder extends StatelessWidget {
   }
 }
 
-class EmailBuilderWidget extends StatefulWidget {
+class _EmailBuilderWidget extends StatefulWidget {
   String? value;
   int fontSize;
   bool required;
   String label;
   var key;
 
-  EmailBuilderWidget(
+  _EmailBuilderWidget(
       this.value, this.fontSize, this.required, this.label, this.key);
 
-  EmailBuilderState createState() =>
-      EmailBuilderState(value, fontSize, required, label, key);
+  _EmailBuilderState createState() =>
+      _EmailBuilderState(value, fontSize, required, label, key);
 }
 
-class EmailBuilderState extends State<EmailBuilderWidget> {
+class _EmailBuilderState extends State<_EmailBuilderWidget> {
   String? value;
   String suffixValue = '@gmail.com';
   int fontSize;
@@ -111,7 +111,7 @@ class EmailBuilderState extends State<EmailBuilderWidget> {
   String label;
   var key;
 
-  EmailBuilderState(
+  _EmailBuilderState(
       this.value, this.fontSize, this.required, this.label, this.key);
 
   @override

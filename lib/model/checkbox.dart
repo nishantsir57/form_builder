@@ -94,7 +94,7 @@ class CheckboxBuilder extends StatelessWidget {
                       for (int i = 0; i < itemsMap.values.length; i++)
                         itemsList[itemsMap.values.elementAt(i)] = false;
                       itemsMap.values.length > 0
-                          ? previewBloc.widgetListUpdateSink.add({key.toString(): CheckboxBuilderWidget(itemsList, fontSize, key)}) : null;
+                          ? previewBloc.widgetListUpdateSink.add({key.toString(): _CheckboxBuilderWidget(itemsList, fontSize, key)}) : null;
                       itemsMap.values.length > 0
                           ? setState(() {
                               h = 80;
@@ -125,21 +125,21 @@ class CheckboxBuilder extends StatelessWidget {
   }
 }
 
-class CheckboxBuilderWidget extends StatefulWidget {
+class _CheckboxBuilderWidget extends StatefulWidget {
   Map<String, bool> itemsList;
   int fontSize;
   var key;
-  CheckboxBuilderWidget(this.itemsList, this.fontSize, this.key);
-  CheckboxBuilderState createState() =>
-      CheckboxBuilderState(itemsList, fontSize, key);
+  _CheckboxBuilderWidget(this.itemsList, this.fontSize, this.key);
+  _CheckboxBuilderState createState() =>
+      _CheckboxBuilderState(itemsList, fontSize, key);
 }
 
-class CheckboxBuilderState extends State<CheckboxBuilderWidget> {
+class _CheckboxBuilderState extends State<_CheckboxBuilderWidget> {
   Map<String, bool> items;
   int fontSize;
   var key;
 
-  CheckboxBuilderState(this.items, this.fontSize, this.key);
+  _CheckboxBuilderState(this.items, this.fontSize, this.key);
 
   bool checked = false;
 

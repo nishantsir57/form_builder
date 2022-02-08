@@ -99,7 +99,7 @@ class ParagraphBuilder extends StatelessWidget {
                     onPressed: () {
                       value.length > 0
                           ? previewBloc.widgetListUpdateSink.add({
-                              key.toString(): ParagraphBuilderWidget(
+                              key.toString(): _ParagraphBuilderWidget(
                                   value, fontSize, required, key)
                             })
                           : Container();
@@ -133,25 +133,25 @@ class ParagraphBuilder extends StatelessWidget {
   }
 }
 
-class ParagraphBuilderWidget extends StatefulWidget {
+class _ParagraphBuilderWidget extends StatefulWidget {
   String? value;
   int fontSize;
   bool required;
   var key;
 
-  ParagraphBuilderWidget(this.value, this.fontSize, this.required, this.key);
+  _ParagraphBuilderWidget(this.value, this.fontSize, this.required, this.key);
 
-  ParagraphBuilderState createState() =>
-      ParagraphBuilderState(value, fontSize, required, key);
+  _ParagraphBuilderState createState() =>
+      _ParagraphBuilderState(value, fontSize, required, key);
 }
 
-class ParagraphBuilderState extends State<ParagraphBuilderWidget> {
+class _ParagraphBuilderState extends State<_ParagraphBuilderWidget> {
   String? value;
   int fontSize;
   bool required;
   var key;
 
-  ParagraphBuilderState(this.value, this.fontSize, this.required, this.key);
+  _ParagraphBuilderState(this.value, this.fontSize, this.required, this.key);
 
   @override
   Widget build(BuildContext context) {

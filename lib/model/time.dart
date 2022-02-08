@@ -8,7 +8,7 @@ class TimeBuilder extends StatelessWidget {
   buildDialog(context) {
     final key = GlobalKey();
     previewBloc.widgetListUpdateSink
-        .add({key.toString(): TimeBuilderWidget(key)});
+        .add({key.toString(): _TimeBuilderWidget(key)});
   }
 
   @override
@@ -17,18 +17,18 @@ class TimeBuilder extends StatelessWidget {
   }
 }
 
-class TimeBuilderWidget extends StatefulWidget {
+class _TimeBuilderWidget extends StatefulWidget {
   var key;
 
-  TimeBuilderWidget(this.key);
+  _TimeBuilderWidget(this.key);
 
-  TimeBuilderState createState() => TimeBuilderState(key);
+  _TimeBuilderState createState() => _TimeBuilderState(key);
 }
 
-class TimeBuilderState extends State<TimeBuilderWidget> {
+class _TimeBuilderState extends State<_TimeBuilderWidget> {
   var key;
 
-  TimeBuilderState(this.key);
+  _TimeBuilderState(this.key);
 
   TimeOfDay time = TimeOfDay.now();
 

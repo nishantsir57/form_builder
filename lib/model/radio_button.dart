@@ -99,7 +99,7 @@ class RadioBuilder extends StatelessWidget {
                       itemsMap.values.length > 0
                           ? previewBloc.widgetListUpdateSink.add({
                               key.toString():
-                                  RadioBuilderWidget(fontSize, list, key)
+                                  _RadioBuilderWidget(fontSize, list, key)
                             })
                           : null;
                       itemsMap.values.length > 0
@@ -131,24 +131,24 @@ class RadioBuilder extends StatelessWidget {
   }
 }
 
-class RadioBuilderWidget extends StatefulWidget {
+class _RadioBuilderWidget extends StatefulWidget {
   int fontSize;
   List<String> itemsList;
   var key;
 
-  RadioBuilderWidget(this.fontSize, this.itemsList, this.key);
+  _RadioBuilderWidget(this.fontSize, this.itemsList, this.key);
 
-  RadioBuilderState createState() =>
-      RadioBuilderState(fontSize, itemsList, key);
+  _RadioBuilderState createState() =>
+      _RadioBuilderState(fontSize, itemsList, key);
 }
 
-class RadioBuilderState extends State<RadioBuilderWidget> {
+class _RadioBuilderState extends State<_RadioBuilderWidget> {
   int value = 1;
   int fontSize;
   List<String> itemsList;
   var key;
 
-  RadioBuilderState(this.fontSize, this.itemsList, this.key);
+  _RadioBuilderState(this.fontSize, this.itemsList, this.key);
 
   @override
   Widget build(BuildContext context) {

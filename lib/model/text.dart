@@ -94,7 +94,7 @@ class TextBuilder extends StatelessWidget {
                       value.length > 0
                           ? previewBloc.widgetListUpdateSink.add({
                               key.toString():
-                                  TextBuilderWidget(value, fontSize, key)
+                                  _TextBuilderWidget(value, fontSize, key)
                             })
                           : null;
                       value.length > 0
@@ -126,22 +126,22 @@ class TextBuilder extends StatelessWidget {
   }
 }
 
-class TextBuilderWidget extends StatefulWidget {
+class _TextBuilderWidget extends StatefulWidget {
   String? value;
   int fontSize;
   var key;
 
-  TextBuilderWidget(this.value, this.fontSize, this.key);
+  _TextBuilderWidget(this.value, this.fontSize, this.key);
 
-  TextBuilderState createState() => TextBuilderState(value, fontSize, key);
+  _TextBuilderState createState() => _TextBuilderState(value, fontSize, key);
 }
 
-class TextBuilderState extends State<TextBuilderWidget> {
+class _TextBuilderState extends State<_TextBuilderWidget> {
   String? value;
   int fontSize;
   var key;
 
-  TextBuilderState(this.value, this.fontSize, this.key);
+  _TextBuilderState(this.value, this.fontSize, this.key);
 
   @override
   Widget build(BuildContext context) {

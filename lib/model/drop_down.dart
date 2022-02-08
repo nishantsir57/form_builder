@@ -93,7 +93,7 @@ class DropdownBuilder extends StatelessWidget {
                         list.add(itemsMap.values.elementAt(i));
                       itemsMap.values.length > 0
                           ? previewBloc.widgetListUpdateSink.add({
-                              key.toString(): DropdownBuilderWidget(
+                              key.toString(): _DropdownBuilderWidget(
                                   list, ddValue, fontSize, key)
                             })
                           : null;
@@ -124,25 +124,25 @@ class DropdownBuilder extends StatelessWidget {
   }
 }
 
-class DropdownBuilderWidget extends StatefulWidget {
+class _DropdownBuilderWidget extends StatefulWidget {
   List<String> itemsList;
   String ddValue;
   int fontSize;
   var key;
 
-  DropdownBuilderWidget(this.itemsList, this.ddValue, this.fontSize, this.key);
+  _DropdownBuilderWidget(this.itemsList, this.ddValue, this.fontSize, this.key);
 
-  DropdownBuilderState createState() =>
-      DropdownBuilderState(itemsList, ddValue, fontSize, key);
+  _DropdownBuilderState createState() =>
+      _DropdownBuilderState(itemsList, ddValue, fontSize, key);
 }
 
-class DropdownBuilderState extends State<DropdownBuilderWidget> {
+class _DropdownBuilderState extends State<_DropdownBuilderWidget> {
   List<String> itemsList;
   String dropdownValue;
   int fontSize;
   var key;
 
-  DropdownBuilderState(
+  _DropdownBuilderState(
       this.itemsList, this.dropdownValue, this.fontSize, this.key);
 
   @override

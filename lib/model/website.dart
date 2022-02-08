@@ -117,7 +117,7 @@ class WebsiteBuilder extends StatelessWidget {
                     onPressed: () {
                       value.length > 0
                           ? previewBloc.widgetListUpdateSink.add({
-                              key.toString(): WebsiteBuilderWidget(
+                              key.toString(): _WebsiteBuilderWidget(
                                   value, fontSize, required, key)
                             })
                           : null;
@@ -138,19 +138,19 @@ class WebsiteBuilder extends StatelessWidget {
   }
 }
 
-class WebsiteBuilderWidget extends StatefulWidget {
+class _WebsiteBuilderWidget extends StatefulWidget {
   String? value;
   int fontSize;
   bool required;
   var key;
 
-  WebsiteBuilderWidget(this.value, this.fontSize, this.required, this.key);
+  _WebsiteBuilderWidget(this.value, this.fontSize, this.required, this.key);
 
-  WebsiteBuilderState createState() =>
-      WebsiteBuilderState(value, fontSize, required, key);
+  _WebsiteBuilderState createState() =>
+      _WebsiteBuilderState(value, fontSize, required, key);
 }
 
-class WebsiteBuilderState extends State<WebsiteBuilderWidget> {
+class _WebsiteBuilderState extends State<_WebsiteBuilderWidget> {
   String? value;
   String suffixValue = '.com';
   int fontSize;
@@ -158,7 +158,7 @@ class WebsiteBuilderState extends State<WebsiteBuilderWidget> {
   String newText = 'h';
   var key;
 
-  WebsiteBuilderState(this.value, this.fontSize, this.required, this.key);
+  _WebsiteBuilderState(this.value, this.fontSize, this.required, this.key);
 
   @override
   Widget build(BuildContext context) {
