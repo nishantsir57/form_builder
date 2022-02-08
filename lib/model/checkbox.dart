@@ -54,7 +54,7 @@ class CheckboxBuilder extends StatelessWidget {
                                         ? 'Atleast 1 field is required'
                                         : null),
                                 onChanged: (v) => setState(() {
-                                  showErrorText = false;
+                                  showErrorText = v.length>0?false:true;
                                   v.length > 0
                                       ? itemsMap['$i'] = v
                                       : itemsMap.remove('$i');
@@ -146,6 +146,7 @@ class _CheckboxBuilderState extends State<_CheckboxBuilderWidget> {
   @override
   Widget build(BuildContext context) {
     exportBloc.codeUpdateSink.add({key.toString(): getCode()});
+    exportBloc.functionUpdateSink.add({key.toString() : getFunction()});
     return ListTile(
       title: Row(
         children: [
@@ -175,6 +176,7 @@ class _CheckboxBuilderState extends State<_CheckboxBuilderWidget> {
         onPressed: () {
           previewBloc.widgetRemoveSink.add(key.toString());
           exportBloc.codeRemoveSink.add(key.toString());
+          exportBloc.functionRemoveSink.add(key.toString());
         },
         child: Text('remove'),
       ),
@@ -183,19 +185,39 @@ class _CheckboxBuilderState extends State<_CheckboxBuilderWidget> {
 
   getCode() {
     String s = '';
-    for (int i = 1; i <= items.length; i++)
       s += """
-      CheckboxListTile(
-              title: Text('${items.keys.elementAt(i - 1)}'),
-                style: TextStyle(fontSize: ${fontSize.toDouble()}),
+        getCheckBox(items, fontSize)
+        {
+        return Row(
+        children: [
+          for (int i = 1; i <= items.length; i++)
+            AnimatedContainer(
+              duration: Duration(seconds: 2),
+              curve: Curves.easeOutSine,
+              padding: EdgeInsets.all(2),
+              width:
+                 (items.keys.elementAt(i - 1).length + 1) * 8 + fontSize * 5,
+              height: 50,
+              child: CheckboxListTile(
+                title: Text(
+                  items.keys.elementAt(i - 1),
+                  style: TextStyle(fontSize: fontSize.toDouble()),
+                ),
+                value: items.values.elementAt(i - 1),
+                onChanged: (newValue) {
+                  items[items.keys.elementAt(i - 1)] = newValue!;
+                  setState(() {});
+                },
               ),
-              value: ${items.values.elementAt(i - 1)},
-              onChanged: (newValue) {
-                '${items[items.keys.elementAt(i - 1)]}'
-                //Write your logic here
-              },
             ),
+        ],
+      );
+        }
       """;
     return s;
+  }
+  getFunction()
+  {
+    return "getCheckbox($items, $fontSize),\n";
   }
 }

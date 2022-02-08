@@ -146,6 +146,7 @@ class _TextBuilderState extends State<_TextBuilderWidget> {
   @override
   Widget build(BuildContext context) {
     exportBloc.codeUpdateSink.add({key.toString(): getCode()});
+    exportBloc.functionUpdateSink.add({key.toString() : getFunction()});
     print(key.toString());
     return ListTile(
       title: Text(
@@ -158,6 +159,7 @@ class _TextBuilderState extends State<_TextBuilderWidget> {
         onPressed: () {
           previewBloc.widgetRemoveSink.add(key.toString());
           exportBloc.codeRemoveSink.add(key.toString());
+          exportBloc.functionRemoveSink.add(key.toString());
         },
         child: Text('Remove'),
       ),
@@ -167,12 +169,19 @@ class _TextBuilderState extends State<_TextBuilderWidget> {
   getCode() {
     return """
     //Text
-    Text(
-        '$value',
+    getText(value, fontSize)
+    {
+      return Text(
+        value,
         style: TextStyle(
-          fontSize: ${fontSize.toDouble()},
+          fontSize: fontSize.toDouble(),
         ),
-      ),
+      );
+    }
     """;
+  }
+  getFunction()
+  {
+    return "getText('$value', $fontSize),\n";
   }
 }

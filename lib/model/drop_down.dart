@@ -51,12 +51,15 @@ class DropdownBuilder extends StatelessWidget {
                                             itemsMap['$i'] == null
                                         ? 'Atleast 1 field is required'
                                         : null),
-                                onChanged: (v) => setState(() {
-                                  showErrorText = false;
+                                onChanged: (v){
+                                  showErrorText = v.length>0?false:true;
                                   v.length > 0
                                       ? itemsMap['$i'] = v
                                       : itemsMap.remove('$i');
-                                }),
+                                  setState(() {
+
+                                  });
+                                }
                               ),
                             ),
                         ],
@@ -148,8 +151,55 @@ class _DropdownBuilderState extends State<_DropdownBuilderWidget> {
   @override
   Widget build(BuildContext context) {
     dropdownValue = itemsList.elementAt(0);
+    print(itemsList);
     exportBloc.codeUpdateSink.add({key.toString(): getCode()});
+    exportBloc.functionUpdateSink.add({key.toString() : getFunction()});
     return Stack(
+      children: [
+        Container(
+          padding: EdgeInsets.all(20),
+          child: DropdownButton<String>(
+            borderRadius: BorderRadius.circular(20),
+            iconSize: 30,
+            value: dropdownValue,
+            items: itemsList
+                .map((e) => DropdownMenuItem<String>(
+                      child: Text(
+                        e,
+                        style: TextStyle(fontSize: fontSize.toDouble()),
+                      ),
+                      value: e,
+                    ))
+                .toList(),
+            onChanged: (value) {
+              dropdownValue = value!;
+              setState(() {
+              });
+            },
+          ),
+        ),
+        Positioned(
+          right: 30,
+          child: RaisedButton(
+            onPressed: () {
+              previewBloc.widgetRemoveSink.add(key.toString());
+              exportBloc.codeRemoveSink.add(key.toString());
+              exportBloc.functionRemoveSink.add(key.toString());
+            },
+            child: Text('remove'),
+          ),
+        )
+      ],
+    );
+  }
+
+  getCode() {
+    String s = '';
+    return """
+    //Dropdown
+      getDropdown(itemsList, dropdownValue, fontSize)
+      {
+        return Stack(
       children: [
         Container(
           padding: EdgeInsets.all(20),
@@ -185,27 +235,12 @@ class _DropdownBuilderState extends State<_DropdownBuilderWidget> {
         )
       ],
     );
+      }
+    """;
   }
-
-  getCode() {
-    String s = '';
-
+  getFunction(){
     return """
-    //Dropdown
-    Container(
-          padding: EdgeInsets.all(10),
-          child: DropdownButton<String>(
-            borderRadius: BorderRadius.circular(20),
-            iconSize: 20,
-            value: $dropdownValue,
-            items: ${itemsList}.map((e) => DropdownMenuItem<String>(child: Text(e, style: TextStyle(fontSize: fontSize.toDouble()),), value: e,)).toList(),
-            onChanged: (value) {
-              setState(() {
-                '$dropdownValue'
-              });
-            },
-          ),
-        ),
+      getDropdown($itemsList, '$dropdownValue', $fontSize),
     """;
   }
 }

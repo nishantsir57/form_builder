@@ -3,9 +3,7 @@ import 'package:form_builder/Controller/widget_controller.dart';
 import 'package:form_builder/view/home.dart';
 import 'package:provider/provider.dart';
 
-void main() {
-  runApp(MyApp());
-}
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
@@ -17,3 +15,4 @@ class MyApp extends StatelessWidget {
     ], child: MaterialApp(debugShowCheckedModeBanner: false, home: Home()));
   }
 }
+

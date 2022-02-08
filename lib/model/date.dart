@@ -33,6 +33,7 @@ class _DateBuilderState extends State<_DateBuilderWidget> {
   @override
   Widget build(BuildContext context) {
     exportBloc.codeUpdateSink.add({key.toString(): getCode()});
+    exportBloc.functionUpdateSink.add({key.toString() : getFunction()});
     return Container(
       alignment: Alignment.center,
       child: ListTile(
@@ -50,6 +51,7 @@ class _DateBuilderState extends State<_DateBuilderWidget> {
           onPressed: () {
             previewBloc.widgetRemoveSink.add(key.toString());
             exportBloc.codeRemoveSink.add((key.toString()));
+            exportBloc.functionRemoveSink.add(key.toString());
           },
           child: Text('remove'),
         ),
@@ -61,23 +63,30 @@ class _DateBuilderState extends State<_DateBuilderWidget> {
     return """
     
     //Date Picker
-    Container(
+    getDate(date)
+    {
+      return Container(
       alignment: Alignment.center,
       child: ListTile(
-        title: Text('${date.day}/${date.month}/${date.year}'),
+        title: Text('\${date.day}/\${date.month}/\${date.year}'),
         leading: Icon(Icons.date_range_outlined),
-        onTap: ()async{
-          date=(await showDatePicker(
+        onTap: () async {
+          date = (await showDatePicker(
               context: context,
-              initialDate: $date,
+              initialDate: date,
               firstDate: DateTime(1955),
-              lastDate: DateTime(2030)
-          ))!;
-          setState(() {
-          });
+              lastDate: DateTime(2030)))!;
+          setState(() {});
         },
       ),
-    ),
+    )
+    }
+    """;
+  }
+  getFunction()
+  {
+    return """
+      getDate(DateTime.now()),
     """;
   }
 }

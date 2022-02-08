@@ -152,6 +152,7 @@ class _NumberBuilderState extends State<_NumberBuilderWidget> {
   @override
   Widget build(BuildContext context) {
     exportBloc.codeUpdateSink.add({key.toString(): getCode()});
+    exportBloc.functionUpdateSink.add({key.toString() : getFunction()});
     return ListTile(
       title: Container(
         child: TextField(
@@ -177,6 +178,7 @@ class _NumberBuilderState extends State<_NumberBuilderWidget> {
         onPressed: () {
           previewBloc.widgetRemoveSink.add(key.toString());
           exportBloc.codeRemoveSink.add(key.toString());
+          exportBloc.functionRemoveSink.add(key.toString());
         },
         child: Text('remove'),
       ),
@@ -186,28 +188,35 @@ class _NumberBuilderState extends State<_NumberBuilderWidget> {
   getCode() {
     return """
     //Number
-    Container(
-      child: TextField(
-        onChanged: (newValue) {
-          //assign new value i.e. $text
-          setState(() {
-          });
-        },
-        decoration: InputDecoration(
-          errorText: $required && ${text.length}<=0?'This field is required': null,
-          hintText: $value,
+    getNumber(value, fontSize, required)
+    {
+      return ListTile(
+      title: Container(
+        child: TextField(
+          onChanged: (newValue) {
+            text = newValue;
+            setState(() {});
+          },
+          decoration: InputDecoration(
+            errorText:
+                required && text.length <= 0 ? 'This field is required' : null,
+            hintText: value,
+          ),
+          style: TextStyle(
+            fontSize: fontSize.toDouble(),
+          ),
+          keyboardType: TextInputType.number,
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
         ),
-        style: TextStyle(
-          fontSize: $fontSize,
-        ),
-        keyboardType: TextInputType.number,
-        inputFormatters: [
-          FilteringTextInputFormatter.digitsOnly
-        ],
+        padding: EdgeInsets.all(10),
+        width: 200,
       ),
-      padding: EdgeInsets.all(10),
-      width: 200,
-    ),
+    );
+    }
     """;
+  }
+  getFunction()
+  {
+    return "getNumber('$value', $fontSize, $required),\n";
   }
 }

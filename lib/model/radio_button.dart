@@ -153,6 +153,7 @@ class _RadioBuilderState extends State<_RadioBuilderWidget> {
   @override
   Widget build(BuildContext context) {
     exportBloc.codeUpdateSink.add({key.toString(): getCode()});
+    exportBloc.functionUpdateSink.add({key.toString() : getFunction()});
     return ListTile(
       title: Row(
         children: [
@@ -182,6 +183,7 @@ class _RadioBuilderState extends State<_RadioBuilderWidget> {
         onPressed: () {
           previewBloc.widgetRemoveSink.add(key.toString());
           exportBloc.codeRemoveSink.add(key.toString());
+          exportBloc.functionRemoveSink.add(key.toString());
         },
         child: Text('remove'),
       ),
@@ -189,28 +191,39 @@ class _RadioBuilderState extends State<_RadioBuilderWidget> {
   }
 
   getCode() {
-    String s = '';
-    for (int i = 1; i <= itemsList.length; i++)
-      s += """
-    //Radio Button
-        AnimatedContainer(
+    return """
+      getRadioButton(fontSize, itemsList){
+      return ListTile(
+      title: Row(
+        children: [
+          for (int i = 1; i <= itemsList.length; i++)
+            AnimatedContainer(
               duration: Duration(seconds: 2),
               curve: Curves.easeOutSine,
               padding: EdgeInsets.all(2),
-              width: ${(itemsList.elementAt(i - 1).length + 1) * 8 + fontSize * 5},
+              width: (itemsList.elementAt(i - 1).length + 1) * 8 + fontSize * 5,
               height: 50,
-              child:RadioListTile(
-                  value: $i,
-                  groupValue: $value,
-                  title: Text('${itemsList.elementAt(i - 1)}', style: TextStyle(fontSize: ${fontSize.toDouble()}),),
-
-                  onChanged: (int? newVal){
+              child: RadioListTile(
+                  value: i,
+                  groupValue: value,
+                  title: Text(
+                    itemsList.elementAt(i - 1),
+                    style: TextStyle(fontSize: fontSize.toDouble()),
+                  ),
+                  onChanged: (int? newVal) {
                     setState(() {
-                      //value=newVal!; i.e. '$value'
+                      value = newVal!;
                     });
                   }),
             ),
+        ],
+      ),
+    );
+      }
     """;
-    return s;
+  }
+  getFunction()
+  {
+    return "getRadioButton($fontSize, $itemsList),\n";
   }
 }

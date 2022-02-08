@@ -163,6 +163,7 @@ class _WebsiteBuilderState extends State<_WebsiteBuilderWidget> {
   @override
   Widget build(BuildContext context) {
     exportBloc.codeUpdateSink.add({key.toString(): getCode()});
+    exportBloc.functionUpdateSink.add({key.toString() : getFunction()});
     return ListTile(
       title: Container(
         child: TextField(
@@ -197,6 +198,7 @@ class _WebsiteBuilderState extends State<_WebsiteBuilderWidget> {
         onPressed: () {
           previewBloc.widgetRemoveSink.add(key.toString());
           exportBloc.codeRemoveSink.add(key.toString());
+          exportBloc.functionRemoveSink.add(key.toString());
         },
         child: Text('Remove'),
       ),
@@ -206,36 +208,44 @@ class _WebsiteBuilderState extends State<_WebsiteBuilderWidget> {
   getCode() {
     return """
     //Website
-    Container(
-      child: TextField(
-        onChanged: (value){
-          //newText=value;
-          //$value
-          setState(() {
-          });
-        },
-        decoration: InputDecoration(
-            errorText: $required && ${newText.length} <= 0?'Field is required': null,
-          hintText: $value,
-          prefixText: 'https://www.',
-          suffix: DropdownButton(
-            value: $suffixValue,
-            items: ['.com', '.org', '.in', '.edu'].map((e) => DropdownMenuItem(child: Text(e), value: e)).toList(),
-            onChanged: (String? value) {
-              //suffixValue=value!; i.e. '$suffixValue'
-              setState(() {
-              });
-            },
-          )
+    getWebsite(value, fontSize, required)
+    {
+      return ListTile(
+      title: Container(
+        child: TextField(
+          onChanged: (value) {
+            newText = value;
+            setState(() {});
+          },
+          decoration: InputDecoration(
+              errorText:
+                  required && newText.length <= 0 ? 'Field is required' : null,
+              hintText: value,
+              prefixText: 'https://www.',
+              suffix: DropdownButton(
+                value: suffixValue,
+                items: ['.com', '.org', '.in', '.edu']
+                    .map((e) => DropdownMenuItem(child: Text(e), value: e))
+                    .toList(),
+                onChanged: (String? value) {
+                  suffixValue = value!;
+                  setState(() {});
+                },
+              )),
+          style: TextStyle(
+            fontSize: fontSize.toDouble(),
+          ),
+          keyboardType: TextInputType.url,
         ),
-        style: TextStyle(
-          fontSize: ${fontSize.toDouble()},
-        ),
-        keyboardType: TextInputType.url,
+        padding: EdgeInsets.all(10),
+        width: 200,
       ),
-      padding: EdgeInsets.all(10),
-      width: 200,
-    ),
+    );
+    }
     """;
+  }
+  getFunction()
+  {
+    return "getWebsite($value, $fontSize, $required),\n";
   }
 }

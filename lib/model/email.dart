@@ -117,6 +117,7 @@ class _EmailBuilderState extends State<_EmailBuilderWidget> {
   @override
   Widget build(BuildContext context) {
     exportBloc.codeUpdateSink.add({key.toString(): getCode()});
+    exportBloc.functionUpdateSink.add({key.toString() : getFunction()});
     return ListTile(
       title: Container(
         child: TextField(
@@ -155,6 +156,7 @@ class _EmailBuilderState extends State<_EmailBuilderWidget> {
         onPressed: () {
           previewBloc.widgetRemoveSink.add(key.toString());
           exportBloc.codeRemoveSink.add(key.toString());
+          exportBloc.functionRemoveSink.add(key.toString());
         },
         child: Text('remove'),
       ),
@@ -164,33 +166,47 @@ class _EmailBuilderState extends State<_EmailBuilderWidget> {
   getCode() {
     return """  
     //Email
-    Container(
-      child: TextField(
-        onChanged: (value){
-          setState(() {
-          '$newText'
-          });
-        },
-        decoration: InputDecoration(
-          errorText: $required && ${newText.length} <= 0?'Field is required': null,
-            hintText: $value,
-            suffix: DropdownButton(
-              value: $suffixValue,
-              items: ['@gmail.com', '@yahoo.com', '@yahoo.in', '@rediffmail.com'].map((e) => DropdownMenuItem(child: Text(e), value: e)).toList(),
-              onChanged: (String? value) {
-                //'$suffixValue' provide updated value to your suffix value
-                setState(() {
-                });
-              }, 
-            )
+    getEmail(value, fontSize, required, label){
+      return ListTile(
+      title: Container(
+        child: TextField(
+          onChanged: (value) {
+            setState(() {
+              newText = value;
+            });
+          },
+          decoration: InputDecoration(
+              errorText:
+                  required && newText.length <= 0 ? 'Field is required' : null,
+              hintText: value,
+              suffix: DropdownButton(
+                value: suffixValue,
+                items: [
+                  '@gmail.com',
+                  '@yahoo.com',
+                  '@yahoo.in',
+                  '@rediffmail.com'
+                ]
+                    .map((e) => DropdownMenuItem(child: Text(e), value: e))
+                    .toList(),
+                onChanged: (String? value) {
+                  suffixValue = value!;
+                  setState(() {});
+                },
+              )),
+          style: TextStyle(
+            fontSize: fontSize.toDouble(),
+          ),
         ),
-        style: TextStyle(
-          fontSize: $fontSize,
-        ),
+        padding: EdgeInsets.all(10),
+        width: 200,
       ),
-      padding: EdgeInsets.all(10),
-      width: 200,
-    ),
+    );
+    }
     """;
+  }
+  getFunction()
+  {
+    return "getEmail('$value', $fontSize, $required, '$label'),\n";
   }
 }

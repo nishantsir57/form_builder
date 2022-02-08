@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:form_builder/Controller/export_controller.dart';
 import 'package:form_builder/Controller/preview_controller.dart';
 import 'package:form_builder/Controller/widget_controller.dart';
@@ -55,11 +56,11 @@ class HomeState extends State<Home> {
               child: Container(
                 color: Colors.white,
                 alignment: Alignment.topLeft,
-                height: h + h / 2 - 100,
+                height: h + h / 2,
                 child: Row(
                   children: [
                     Text(
-                      'Business card rquest form',
+                      'Business card request form',
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 26),
                     ),
@@ -72,7 +73,7 @@ class HomeState extends State<Home> {
               child: Container(
                 height: 1,
                 width: MediaQuery.of(context).size.width,
-                color: Colors.black,
+                color: Colors.grey[400],
               )),
           Positioned(
               top: 91,
@@ -90,26 +91,31 @@ class HomeState extends State<Home> {
                 ),
               )),
           Positioned(
-              top: 120,
+              top: 130,
               left: 40,
               child: Text(
                 'Drag elements to the right',
                 style: TextStyle(fontSize: 12),
               )),
           Positioned(
-              top: 144,
+              top: 154,
               child: Container(
                 height: 1,
                 width: 280,
-                color: Colors.black,
+                color: Colors.grey[400],
               )),
           Positioned(
-              top: 145,
+              top: 155,
               child: Container(
                 child: Container(
                   width: 280,
-                  height: h - 150,
-                  color: Colors.red[100],
+                  height: h - 155,
+                  // color: Colors.white30,
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(color: Colors.grey.shade200),
+                    ]
+                  ),
                   child: _buildPallets(),
                 ),
               )),
@@ -134,26 +140,27 @@ class HomeState extends State<Home> {
               top: 91,
               child: Container(
                 width: 1,
-                height: 635,
-                color: Colors.black,
+                height: 730,
+                color: Colors.grey[400],
               )),
           Positioned(
-            top: h,
+            top: h+10,
             child: StreamBuilder(
                 stream: exportBloc.codeStream,
                 builder: (BuildContext ctx,
                     AsyncSnapshot<Map<String, String>> snapshot) {
-                  int size = snapshot.data == null ? 0 : snapshot.data!.length;
+
                   return Container(
                       width: w,
-                      height: h / 2 - 50,
+                      height: h/2 ,
                       color: Colors.white30,
-                      child: ListView(
-                        children: [
-                          for (int i = 0; i < size; i++)
-                            Text(snapshot.data!.values.elementAt(i)),
-                        ],
-                      ));
+                      child: Markdown(
+                        selectable: true,
+                        padding: EdgeInsets.all(30),
+                        softLineBreak: true,
+                        data: exportBloc.generateCode(),
+                      ),
+                  );
                 }),
           ),
         ])
@@ -242,25 +249,26 @@ class HomeState extends State<Home> {
   _staticDragButton(icon, name) => AnimatedContainer(
         duration: Duration(seconds: 2),
         curve: Curves.bounceInOut,
-        padding: EdgeInsets.all(5),
+        padding: EdgeInsets.all(2),
         child: Container(
           alignment: Alignment.center,
           width: 80,
-          height: 80,
+          height: 70,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
-              border: Border.all(color: Colors.black),
+              border: Border.all(color: Colors.grey.shade200),
               color: Colors.white),
           child: ListTile(
             title: IconButton(
               onPressed: onPressed,
               icon: icon,
-              alignment: Alignment.centerLeft,
-              iconSize: 25,
+              alignment: Alignment.topCenter,
+              iconSize: 35,
               hoverColor: Colors.green,
             ),
             subtitle: Text(
               '$name',
+              textAlign: TextAlign.center,
               style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
             ),
           ),
