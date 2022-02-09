@@ -107,7 +107,7 @@ class _EmailBuilderState extends State<_EmailBuilderWidget> {
   String suffixValue = '@gmail.com';
   int fontSize;
   bool required;
-  String newText = 'h';
+  String newText = ' ';
   String label;
   var key;
 
@@ -118,6 +118,8 @@ class _EmailBuilderState extends State<_EmailBuilderWidget> {
   Widget build(BuildContext context) {
     exportBloc.codeUpdateSink.add({key.toString(): getCode()});
     exportBloc.functionUpdateSink.add({key.toString() : getFunction()});
+    exportBloc.variableUpdateSink.add({key.toString(): ['var emailValue = "$value";', 'var emailFontSize=$fontSize;',
+      'var emailRequired=$required;', 'var emailLabel="$label";', 'var emailNewText="$newText";', 'var emailSuffixValue="$suffixValue";']});
     return ListTile(
       title: Container(
         child: TextField(
@@ -157,6 +159,7 @@ class _EmailBuilderState extends State<_EmailBuilderWidget> {
           previewBloc.widgetRemoveSink.add(key.toString());
           exportBloc.codeRemoveSink.add(key.toString());
           exportBloc.functionRemoveSink.add(key.toString());
+          exportBloc.variableRemoveSink.add(key.toString());
         },
         child: Text('remove'),
       ),
@@ -166,20 +169,20 @@ class _EmailBuilderState extends State<_EmailBuilderWidget> {
   getCode() {
     return """  
     //Email
-    getEmail(value, fontSize, required, label, newText, suffixValue){
+    getEmail(){
       return Container(
         child: TextField(
           onChanged: (value) {
             setState(() {
-              newText = value;
+              emailNewText = value;
             });
           },
           decoration: InputDecoration(
               errorText:
-                  required && newText.length <= 0 ? 'Field is required' : null,
-              hintText: value,
+                  emailRequired && emailNewText.length <= 0 ? 'Field is required' : null,
+              hintText: emailValue,
               suffix: DropdownButton<String>(
-                value: suffixValue,
+                value: emailSuffixValue,
                 items: [
                   '@gmail.com',
                   '@yahoo.com',
@@ -189,12 +192,12 @@ class _EmailBuilderState extends State<_EmailBuilderWidget> {
                     .map((e) => DropdownMenuItem(child: Text(e), value: e))
                     .toList(),
                 onChanged: (String? value) {
-                  suffixValue = value!;
+                  emailSuffixValue = value!;
                   setState(() {});
                 },
               )),
           style: TextStyle(
-            fontSize: fontSize.toDouble(),
+            fontSize: emailFontSize.toDouble(),
           ),
         ),
         padding: EdgeInsets.all(10),
@@ -205,6 +208,6 @@ class _EmailBuilderState extends State<_EmailBuilderWidget> {
   }
   getFunction()
   {
-    return "getEmail('$value', $fontSize, $required, '$label', '$newText', '$suffixValue'),\n";
+    return "getEmail(),\n";
   }
 }

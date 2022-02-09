@@ -186,7 +186,7 @@ class _CheckboxBuilderState extends State<_CheckboxBuilderWidget> {
   getCode() {
     String s = '';
       s += """
-        getCheckBox(items, fontSize)
+        getCheckbox({items, fontSize})
         {
         return Row(
         children: [
@@ -206,7 +206,8 @@ class _CheckboxBuilderState extends State<_CheckboxBuilderWidget> {
                 value: items.values.elementAt(i - 1),
                 onChanged: (newValue) {
                   items[items.keys.elementAt(i - 1)] = newValue!;
-                  setState(() {});
+                  getCheckbox(items: items);
+                  //setState(() {});
                 },
               ),
             ),

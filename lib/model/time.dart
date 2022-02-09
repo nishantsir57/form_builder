@@ -36,6 +36,7 @@ class _TimeBuilderState extends State<_TimeBuilderWidget> {
   Widget build(BuildContext context) {
     exportBloc.codeUpdateSink.add({key.toString(): getCode()});
     exportBloc.functionUpdateSink.add({key.toString() : getFunction()});
+    exportBloc.variableUpdateSink.add({key.toString(): ['var time = TimeOfDay.now();']});
     return ListTile(
       title: Container(
         alignment: Alignment.center,
@@ -57,6 +58,7 @@ class _TimeBuilderState extends State<_TimeBuilderWidget> {
           previewBloc.widgetRemoveSink.add(key.toString());
           exportBloc.codeRemoveSink.add(key.toString());
           exportBloc.functionRemoveSink.add(key.toString());
+          exportBloc.variableRemoveSink.add(key.toString());
         },
         child: Text('Remove'),
       ),
@@ -67,7 +69,7 @@ class _TimeBuilderState extends State<_TimeBuilderWidget> {
     return """
 
     //Time Picker
-     getTime(time)
+     getTime()
      {
       return ListTile(
       title: Container(
@@ -91,6 +93,6 @@ class _TimeBuilderState extends State<_TimeBuilderWidget> {
   }
   getFunction()
   {
-    return "getTime(TimeOfDay.now()),\n";
+    return "getTime(),\n";
   }
 }

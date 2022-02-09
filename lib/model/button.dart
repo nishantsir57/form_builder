@@ -90,6 +90,7 @@ class _ButtonState extends State<_ButtonWidget>
   Widget build(BuildContext context) {
     exportBloc.codeUpdateSink.add({key.toString(): getCode()});
     exportBloc.functionUpdateSink.add({key.toString(): getFunction()});
+    exportBloc.variableUpdateSink.add({key.toString(): ['var buttonText = "$buttonText";']});
     return ListTile(
       title: Container(
         width: 100,
@@ -107,6 +108,7 @@ class _ButtonState extends State<_ButtonWidget>
           previewBloc.widgetRemoveSink.add(key.toString());
           exportBloc.codeRemoveSink.add(key.toString());
           exportBloc.functionRemoveSink.add(key.toString());
+          exportBloc.variableRemoveSink.add(key.toString());
         },
         child: Text('remove'),
       ),
@@ -117,7 +119,7 @@ class _ButtonState extends State<_ButtonWidget>
   getCode()
   {
     return """
-      getButton(buttonText)
+      getButton()
       {
         return Container(
         padding: EdgeInsets.fromLTRB(200, 20, 200, 20),
@@ -133,7 +135,7 @@ class _ButtonState extends State<_ButtonWidget>
   getFunction()
   {
     return """
-      getButton('$buttonText'),
+      getButton(),
     """;
   }
 

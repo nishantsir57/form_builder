@@ -129,6 +129,8 @@ class _NumberBuilderState extends State<_NumberBuilderWidget> {
   Widget build(BuildContext context) {
     exportBloc.codeUpdateSink.add({key.toString(): getCode()});
     exportBloc.functionUpdateSink.add({key.toString(): getFunction()});
+    exportBloc.variableUpdateSink.add({key.toString(): ['var numberValue = "$value";', 'var numberFontSize=$fontSize;',
+    'var numberRequired=$required;', 'var numberIsEmpty=$isEmpty;', 'var numberText="$text";']});
     return ListTile(
       title: Container(
         child: TextField(
@@ -155,6 +157,7 @@ class _NumberBuilderState extends State<_NumberBuilderWidget> {
           previewBloc.widgetRemoveSink.add(key.toString());
           exportBloc.codeRemoveSink.add(key.toString());
           exportBloc.functionRemoveSink.add(key.toString());
+          exportBloc.variableRemoveSink.add(key.toString());
         },
         child: Text('remove'),
       ),
@@ -164,21 +167,21 @@ class _NumberBuilderState extends State<_NumberBuilderWidget> {
   getCode() {
     return """
     //Number
-    getNumber(value, fontSize, required, isEmpty)
+    getNumber()
     {
       return Container(
         child: TextField(
           onChanged: (newValue) {
-            isEmpty=newValue.length>0?false:true;
-            text = newValue;
+            numberIsEmpty=newValue.length>0?false:true;
+            numberText = newValue;
             setState(() {});
           },
           decoration: InputDecoration(
-            errorText: required && isEmpty ? 'This field is required' : null,
-            hintText: value,
+            errorText: numberRequired && numberIsEmpty ? 'This field is required' : null,
+            hintText: numberValue,
           ),
           style: TextStyle(
-            fontSize: fontSize.toDouble(),
+            fontSize: numberFontSize.toDouble(),
           ),
           keyboardType: TextInputType.number,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -191,6 +194,6 @@ class _NumberBuilderState extends State<_NumberBuilderWidget> {
   }
 
   getFunction() {
-    return "getNumber('$value', $fontSize, $required, false),\n";
+    return "getNumber(),\n";
   }
 }

@@ -155,7 +155,7 @@ class _WebsiteBuilderState extends State<_WebsiteBuilderWidget> {
   String suffixValue = '.com';
   int fontSize;
   bool required;
-  String newText = 'h';
+  String newText = ' ';
   var key;
 
   _WebsiteBuilderState(this.value, this.fontSize, this.required, this.key);
@@ -164,6 +164,8 @@ class _WebsiteBuilderState extends State<_WebsiteBuilderWidget> {
   Widget build(BuildContext context) {
     exportBloc.codeUpdateSink.add({key.toString(): getCode()});
     exportBloc.functionUpdateSink.add({key.toString() : getFunction()});
+    exportBloc.variableUpdateSink.add({key.toString(): ['var websiteValue = "$value";', 'var websiteSuffixValue="$suffixValue";',
+    'var websiteFontSize=$fontSize;', 'var websiteRequired=$required;', 'var websiteNewText="$newText";']});
     return ListTile(
       title: Container(
         child: TextField(
@@ -199,6 +201,7 @@ class _WebsiteBuilderState extends State<_WebsiteBuilderWidget> {
           previewBloc.widgetRemoveSink.add(key.toString());
           exportBloc.codeRemoveSink.add(key.toString());
           exportBloc.functionRemoveSink.add(key.toString());
+          exportBloc.variableRemoveSink.add(key.toString());
         },
         child: Text('Remove'),
       ),
@@ -208,7 +211,7 @@ class _WebsiteBuilderState extends State<_WebsiteBuilderWidget> {
   getCode() {
     return """
     //Website
-    getWebsite(value, fontSize, required)
+    getWebsite()
     {
       return ListTile(
       title: Container(
@@ -246,6 +249,6 @@ class _WebsiteBuilderState extends State<_WebsiteBuilderWidget> {
   }
   getFunction()
   {
-    return "getWebsite($value, $fontSize, $required),\n";
+    return "getWebsite(),\n";
   }
 }

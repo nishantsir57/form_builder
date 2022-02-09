@@ -157,6 +157,7 @@ class _ParagraphBuilderState extends State<_ParagraphBuilderWidget> {
   Widget build(BuildContext context) {
     exportBloc.codeUpdateSink.add({key.toString(): getCode()});
     exportBloc.functionUpdateSink.add({key.toString() : getFunction()});
+    exportBloc.variableUpdateSink.add({key.toString(): ['var paragraphValue = "$value";', 'var paragraphFontSize=$fontSize;']});
     return ListTile(
       title: Text(
         value!,
@@ -169,6 +170,7 @@ class _ParagraphBuilderState extends State<_ParagraphBuilderWidget> {
           previewBloc.widgetRemoveSink.add(key.toString());
           exportBloc.codeRemoveSink.add(key.toString());
           exportBloc.functionRemoveSink.add(key.toString());
+          exportBloc.variableRemoveSink.add(key.toString());
         },
         child: Text('Remove'),
       ),
@@ -178,12 +180,12 @@ class _ParagraphBuilderState extends State<_ParagraphBuilderWidget> {
   getCode() {
     return """
     //Paragraph
-    getParagraph(value, fontSize, required){
+    getParagraph(){
       return ListTile(
       title: Text(
-        value!,
+        paragraphValue!,
         style: TextStyle(
-          fontSize: fontSize.toDouble(),
+          fontSize: paragraphFontSize.toDouble(),
         ),
       ),
     );
@@ -192,6 +194,6 @@ class _ParagraphBuilderState extends State<_ParagraphBuilderWidget> {
   }
   getFunction()
   {
-    return "getParagraph('$value', $fontSize, $required),\n";
+    return "getParagraph(),\n";
   }
 }

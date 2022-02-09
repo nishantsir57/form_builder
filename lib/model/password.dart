@@ -126,6 +126,8 @@ class _PasswordState extends State<_PasswordWidget>
   Widget build(BuildContext context) {
     exportBloc.codeUpdateSink.add({key.toString(): getCode()});
     exportBloc.functionUpdateSink.add({key.toString(): getFunction()});
+    exportBloc.variableUpdateSink.add({key.toString(): ['var passwordValue = "$value";', 'var passwordFontSize=$fontSize;',
+    'var passwordRequired=$required;', 'var passwordIsEmpty=false;', 'var passwordText="";']});
     return ListTile(
       title: Container(
         child: TextField(
@@ -153,6 +155,7 @@ class _PasswordState extends State<_PasswordWidget>
           previewBloc.widgetRemoveSink.add(key.toString());
           exportBloc.codeRemoveSink.add(key.toString());
           exportBloc.functionRemoveSink.add(key.toString());
+          exportBloc.variableRemoveSink.add(key.toString());
         },
         child: Text('remove'),
       ),
@@ -162,23 +165,23 @@ class _PasswordState extends State<_PasswordWidget>
   getCode()
   {
     return """
-      getPassword(value, fontSize, required, isEmpty, text)
+      getPassword()
       {
         return Container(
         child: TextField(
           obscureText: true,
           onChanged: (newValue) {
-            isEmpty=newValue.length>0?false:true;
-            text = newValue;
+            passwordIsEmpty=newValue.length>0?false:true;
+            passwordText = newValue;
             setState(() {});
           },
           decoration: InputDecoration(
             errorText:
-            required && isEmpty ? 'This field is required' : null,
-            hintText: value,
+            passwordRequired && passwordIsEmpty ? 'This field is required' : null,
+            hintText: passwordValue,
           ),
           style: TextStyle(
-            fontSize: fontSize.toDouble(),
+            fontSize: passwordFontSize.toDouble(),
           ),
         ),
         padding: EdgeInsets.all(10),
@@ -190,7 +193,7 @@ class _PasswordState extends State<_PasswordWidget>
   getFunction()
   {
     return """
-      getPassword('$value', $fontSize, $required, false, '$text'),
+      getPassword(),
     """;
   }
 }

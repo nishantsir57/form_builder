@@ -34,6 +34,7 @@ class _DateBuilderState extends State<_DateBuilderWidget> {
   Widget build(BuildContext context) {
     exportBloc.codeUpdateSink.add({key.toString(): getCode()});
     exportBloc.functionUpdateSink.add({key.toString() : getFunction()});
+    exportBloc.variableUpdateSink.add({key.toString(): ['var date = DateTime.now();']});
     return Container(
       alignment: Alignment.center,
       child: ListTile(
@@ -52,6 +53,7 @@ class _DateBuilderState extends State<_DateBuilderWidget> {
             previewBloc.widgetRemoveSink.add(key.toString());
             exportBloc.codeRemoveSink.add((key.toString()));
             exportBloc.functionRemoveSink.add(key.toString());
+            exportBloc.variableRemoveSink.add(key.toString());
           },
           child: Text('remove'),
         ),
@@ -63,7 +65,7 @@ class _DateBuilderState extends State<_DateBuilderWidget> {
     return """
     
     //Date Picker
-    getDate(date)
+    getDate()
     {
       return Container(
       alignment: Alignment.center,
@@ -86,7 +88,7 @@ class _DateBuilderState extends State<_DateBuilderWidget> {
   getFunction()
   {
     return """
-      getDate(DateTime.now()),
+      getDate(),
     """;
   }
 }
