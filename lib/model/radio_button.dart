@@ -152,8 +152,17 @@ class _RadioBuilderState extends State<_RadioBuilderWidget> {
 
   @override
   Widget build(BuildContext context) {
+    String listExportString='[';
+    for(int i=0;i<itemsList.length;i++)
+    {
+      listExportString+="'${itemsList.elementAt(i)}',";
+    }
+    listExportString+="]";
     exportBloc.codeUpdateSink.add({key.toString(): getCode()});
     exportBloc.functionUpdateSink.add({key.toString() : getFunction()});
+    exportBloc.variableUpdateSink.add({key.toString(): ['var radioItemsList = $listExportString;',
+      'var radioFontSize=$fontSize;', 'var radioValue=$value;']});
+
     return ListTile(
       title: Row(
         children: [
@@ -184,6 +193,7 @@ class _RadioBuilderState extends State<_RadioBuilderWidget> {
           previewBloc.widgetRemoveSink.add(key.toString());
           exportBloc.codeRemoveSink.add(key.toString());
           exportBloc.functionRemoveSink.add(key.toString());
+          exportBloc.variableRemoveSink.add(key.toString());
         },
         child: Text('remove'),
       ),
@@ -192,27 +202,27 @@ class _RadioBuilderState extends State<_RadioBuilderWidget> {
 
   getCode() {
     return """
-      getRadioButton(fontSize, itemsList){
+      getRadioButton(){
       return ListTile(
       title: Row(
         children: [
-          for (int i = 1; i <= itemsList.length; i++)
+          for (int i = 1; i <= radioItemsList.length; i++)
             AnimatedContainer(
               duration: Duration(seconds: 2),
               curve: Curves.easeOutSine,
               padding: EdgeInsets.all(2),
-              width: (itemsList.elementAt(i - 1).length + 1) * 8 + fontSize * 5,
+              width: (radioItemsList.elementAt(i - 1).length + 1) * 8 + radioFontSize * 5,
               height: 50,
               child: RadioListTile(
                   value: i,
-                  groupValue: value,
+                  groupValue: radioValue,
                   title: Text(
-                    itemsList.elementAt(i - 1),
-                    style: TextStyle(fontSize: fontSize.toDouble()),
+                    radioItemsList.elementAt(i - 1),
+                    style: TextStyle(fontSize: radioFontSize.toDouble()),
                   ),
                   onChanged: (int? newVal) {
                     setState(() {
-                      value = newVal!;
+                      radioValue = newVal!;
                     });
                   }),
             ),
@@ -224,6 +234,6 @@ class _RadioBuilderState extends State<_RadioBuilderWidget> {
   }
   getFunction()
   {
-    return "getRadioButton($fontSize, $itemsList),\n";
+    return "getRadioButton(),\n";
   }
 }

@@ -136,7 +136,7 @@ class _DropdownBuilderWidget extends StatefulWidget {
   _DropdownBuilderWidget(this.itemsList, this.ddValue, this.fontSize, this.key);
 
   _DropdownBuilderState createState() =>
-      _DropdownBuilderState(itemsList, ddValue, fontSize, key);
+      _DropdownBuilderState(itemsList, itemsList.elementAt(0), fontSize, key);
 }
 
 class _DropdownBuilderState extends State<_DropdownBuilderWidget> {
@@ -150,10 +150,16 @@ class _DropdownBuilderState extends State<_DropdownBuilderWidget> {
 
   @override
   Widget build(BuildContext context) {
-    dropdownValue = itemsList.elementAt(0);
-    print(itemsList);
+    String listExportString='[';
+    for(int i=0;i<itemsList.length;i++)
+    {
+      listExportString+="'${itemsList.elementAt(i)}',";
+    }
+    listExportString+="]";
     exportBloc.codeUpdateSink.add({key.toString(): getCode()});
     exportBloc.functionUpdateSink.add({key.toString() : getFunction()});
+    exportBloc.variableUpdateSink.add({key.toString(): ['var dropdownItemsList = $listExportString;',
+      'var dropdownValue="$dropdownValue";', 'var dropdownFontSize=$fontSize;']});
     return Stack(
       children: [
         Container(
@@ -185,6 +191,7 @@ class _DropdownBuilderState extends State<_DropdownBuilderWidget> {
               previewBloc.widgetRemoveSink.add(key.toString());
               exportBloc.codeRemoveSink.add(key.toString());
               exportBloc.functionRemoveSink.add(key.toString());
+              exportBloc.variableRemoveSink.add(key.toString());
             },
             child: Text('remove'),
           ),
@@ -197,50 +204,36 @@ class _DropdownBuilderState extends State<_DropdownBuilderWidget> {
     String s = '';
     return """
     //Dropdown
-      getDropdown(itemsList, dropdownValue, fontSize)
+      getDropdown()
       {
-        return Stack(
-      children: [
-        Container(
+        return Container(
           padding: EdgeInsets.all(20),
           child: DropdownButton<String>(
             borderRadius: BorderRadius.circular(20),
-            iconSize: 20,
+            iconSize: 30,
             value: dropdownValue,
-            items: itemsList
+            items: dropdownItemsList
                 .map((e) => DropdownMenuItem<String>(
                       child: Text(
                         e,
-                        style: TextStyle(fontSize: fontSize.toDouble()),
+                        style: TextStyle(fontSize: dropdownFontSize.toDouble()),
                       ),
                       value: e,
                     ))
                 .toList(),
             onChanged: (value) {
+              dropdownValue = value!;
               setState(() {
-                dropdownValue = value!;
               });
             },
           ),
-        ),
-        Positioned(
-          right: 30,
-          child: RaisedButton(
-            onPressed: () {
-              previewBloc.widgetRemoveSink.add(key.toString());
-              exportBloc.codeRemoveSink.add(key.toString());
-            },
-            child: Text('remove'),
-          ),
-        )
-      ],
-    );
-      }
+        );
+        }
     """;
   }
   getFunction(){
     return """
-      getDropdown($itemsList, '$dropdownValue', $fontSize),
+      getDropdown(),
     """;
   }
 }

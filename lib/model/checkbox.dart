@@ -145,8 +145,16 @@ class _CheckboxBuilderState extends State<_CheckboxBuilderWidget> {
 
   @override
   Widget build(BuildContext context) {
+    String listExportString='{';
+    for(int i=0;i<items.keys.length;i++)
+      {
+        listExportString+="'${items.keys.elementAt(i)}' : ${items.values.elementAt(i)},";
+      }
+    listExportString+="}";
     exportBloc.codeUpdateSink.add({key.toString(): getCode()});
     exportBloc.functionUpdateSink.add({key.toString() : getFunction()});
+    exportBloc.variableUpdateSink.add({key.toString(): ['var checkboxItems = $listExportString;', 'var checkboxFontSize=$fontSize;']});
+
     return ListTile(
       title: Row(
         children: [
@@ -177,6 +185,7 @@ class _CheckboxBuilderState extends State<_CheckboxBuilderWidget> {
           previewBloc.widgetRemoveSink.add(key.toString());
           exportBloc.codeRemoveSink.add(key.toString());
           exportBloc.functionRemoveSink.add(key.toString());
+          exportBloc.variableRemoveSink.add(key.toString());
         },
         child: Text('remove'),
       ),
@@ -186,28 +195,27 @@ class _CheckboxBuilderState extends State<_CheckboxBuilderWidget> {
   getCode() {
     String s = '';
       s += """
-        getCheckbox({items, fontSize})
+        getCheckbox()
         {
         return Row(
         children: [
-          for (int i = 1; i <= items.length; i++)
+          for (int i = 1; i <= checkboxItems.length; i++)
             AnimatedContainer(
               duration: Duration(seconds: 2),
               curve: Curves.easeOutSine,
               padding: EdgeInsets.all(2),
               width:
-                 (items.keys.elementAt(i - 1).length + 1) * 8 + fontSize * 5,
+                 (checkboxItems.keys.elementAt(i - 1).length + 1) * 8 + checkboxFontSize * 5,
               height: 50,
               child: CheckboxListTile(
                 title: Text(
-                  items.keys.elementAt(i - 1),
-                  style: TextStyle(fontSize: fontSize.toDouble()),
+                  checkboxItems.keys.elementAt(i - 1),
+                  style: TextStyle(fontSize: checkboxFontSize.toDouble()),
                 ),
-                value: items.values.elementAt(i - 1),
+                value: checkboxItems.values.elementAt(i - 1),
                 onChanged: (newValue) {
-                  items[items.keys.elementAt(i - 1)] = newValue!;
-                  getCheckbox(items: items);
-                  //setState(() {});
+                  checkboxItems[checkboxItems.keys.elementAt(i - 1)] = newValue!;
+                  setState(() {});
                 },
               ),
             ),
@@ -219,6 +227,6 @@ class _CheckboxBuilderState extends State<_CheckboxBuilderWidget> {
   }
   getFunction()
   {
-    return "getCheckbox($items, $fontSize),\n";
+    return "getCheckbox(),\n";
   }
 }
