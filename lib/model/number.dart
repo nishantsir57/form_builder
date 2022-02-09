@@ -52,32 +52,7 @@ class NumberBuilder extends StatelessWidget {
                   DropdownButton(
                       value: fontSize,
                       items: [
-                        1,
-                        2,
-                        4,
-                        6,
-                        8,
-                        10,
-                        12,
-                        14,
-                        16,
-                        18,
-                        20,
-                        22,
-                        24,
-                        26,
-                        28,
-                        30,
-                        32,
-                        34,
-                        36,
-                        38,
-                        40,
-                        42,
-                        44,
-                        46,
-                        48,
-                        50
+                        1, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50
                       ]
                           .map((e) => DropdownMenuItem(
                                 child: Text('$e'),
@@ -144,7 +119,8 @@ class _NumberBuilderState extends State<_NumberBuilderWidget> {
   String? value;
   int fontSize;
   bool required;
-  String text = '9';
+  bool isEmpty=false;
+  String text = '';
   var key;
 
   _NumberBuilderState(this.value, this.fontSize, this.required, this.key);
@@ -152,17 +128,17 @@ class _NumberBuilderState extends State<_NumberBuilderWidget> {
   @override
   Widget build(BuildContext context) {
     exportBloc.codeUpdateSink.add({key.toString(): getCode()});
-    exportBloc.functionUpdateSink.add({key.toString() : getFunction()});
+    exportBloc.functionUpdateSink.add({key.toString(): getFunction()});
     return ListTile(
       title: Container(
         child: TextField(
           onChanged: (newValue) {
+            isEmpty=newValue.length>0?false:true;
             text = newValue;
             setState(() {});
           },
           decoration: InputDecoration(
-            errorText:
-                required && text.length <= 0 ? 'This field is required' : null,
+            errorText: required && isEmpty ? 'This field is required' : null,
             hintText: value,
           ),
           style: TextStyle(
@@ -188,18 +164,17 @@ class _NumberBuilderState extends State<_NumberBuilderWidget> {
   getCode() {
     return """
     //Number
-    getNumber(value, fontSize, required)
+    getNumber(value, fontSize, required, isEmpty)
     {
-      return ListTile(
-      title: Container(
+      return Container(
         child: TextField(
           onChanged: (newValue) {
+            isEmpty=newValue.length>0?false:true;
             text = newValue;
             setState(() {});
           },
           decoration: InputDecoration(
-            errorText:
-                required && text.length <= 0 ? 'This field is required' : null,
+            errorText: required && isEmpty ? 'This field is required' : null,
             hintText: value,
           ),
           style: TextStyle(
@@ -210,13 +185,12 @@ class _NumberBuilderState extends State<_NumberBuilderWidget> {
         ),
         padding: EdgeInsets.all(10),
         width: 200,
-      ),
-    );
+      );
     }
     """;
   }
-  getFunction()
-  {
-    return "getNumber('$value', $fontSize, $required),\n";
+
+  getFunction() {
+    return "getNumber('$value', $fontSize, $required, false),\n";
   }
 }

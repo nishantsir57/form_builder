@@ -166,9 +166,8 @@ class _EmailBuilderState extends State<_EmailBuilderWidget> {
   getCode() {
     return """  
     //Email
-    getEmail(value, fontSize, required, label){
-      return ListTile(
-      title: Container(
+    getEmail(value, fontSize, required, label, newText, suffixValue){
+      return Container(
         child: TextField(
           onChanged: (value) {
             setState(() {
@@ -179,7 +178,7 @@ class _EmailBuilderState extends State<_EmailBuilderWidget> {
               errorText:
                   required && newText.length <= 0 ? 'Field is required' : null,
               hintText: value,
-              suffix: DropdownButton(
+              suffix: DropdownButton<String>(
                 value: suffixValue,
                 items: [
                   '@gmail.com',
@@ -200,13 +199,12 @@ class _EmailBuilderState extends State<_EmailBuilderWidget> {
         ),
         padding: EdgeInsets.all(10),
         width: 200,
-      ),
-    );
+      );
     }
     """;
   }
   getFunction()
   {
-    return "getEmail('$value', $fontSize, $required, '$label'),\n";
+    return "getEmail('$value', $fontSize, $required, '$label', '$newText', '$suffixValue'),\n";
   }
 }

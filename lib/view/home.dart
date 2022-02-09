@@ -3,12 +3,14 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:form_builder/Controller/export_controller.dart';
 import 'package:form_builder/Controller/preview_controller.dart';
 import 'package:form_builder/Controller/widget_controller.dart';
+import 'package:form_builder/model/button.dart';
 import 'package:form_builder/model/checkbox.dart';
 import 'package:form_builder/model/date.dart';
 import 'package:form_builder/model/drop_down.dart';
 import 'package:form_builder/model/email.dart';
 import 'package:form_builder/model/number.dart';
 import 'package:form_builder/model/paragraph.dart';
+import 'package:form_builder/model/password.dart';
 import 'package:form_builder/model/radio_button.dart';
 import 'package:form_builder/model/text.dart';
 import 'package:form_builder/model/time.dart';
@@ -125,7 +127,7 @@ class HomeState extends State<Home> {
               child: StreamBuilder(
                 stream: previewBloc.widgetListStream,
                 builder: (_, snapshot) {
-                  hp += 50;
+                  hp += 70;
                   return Container(
                     padding: EdgeInsets.fromLTRB(30, 30, 30, 60),
                     width: w - 270,
@@ -152,8 +154,9 @@ class HomeState extends State<Home> {
 
                   return Container(
                       width: w,
-                      height: h/2 ,
+                      height: h/2-100 ,
                       color: Colors.white30,
+                      padding: EdgeInsets.all(40),
                       child: Markdown(
                         selectable: true,
                         padding: EdgeInsets.all(30),
@@ -194,6 +197,8 @@ class HomeState extends State<Home> {
           Row(
             children: [
               createIconButton(EmailBuilder()),
+              createIconButton(PasswordBuilder()),
+              createIconButton(ButtonBuilder()),
             ],
           )
         ],

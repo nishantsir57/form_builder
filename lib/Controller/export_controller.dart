@@ -72,6 +72,7 @@ class ExportBloc {
       function+=s;
     return """
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -87,28 +88,19 @@ class HomeState extends State<Home> {
 @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _buildBody(),
-    );
-  }
+      body: _buildBody(),);}
 _buildBody() {
     var w = MediaQuery.of(context).size.width;
     var h = MediaQuery.of(context).size.height;
-    return Container(
-                    padding: EdgeInsets.fromLTRB(30, 30, 30, 60),
-                    color: Color(0xffedebe6),
-                    child: createPreviewPage(),
-                  );
+    return Container(padding: EdgeInsets.fromLTRB(30, 30, 30, 60),color: Color(0xffedebe6),child: createPreviewPage(),);
   }
   createPreviewPage()
   {
     return ListView(
-    children:[
-        $function
-    ]
-    );
+    children:[$function]);
+    }
+    $code
   }
-  }
-  $code
     """;
   }
 }
